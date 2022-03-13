@@ -13,7 +13,6 @@ function check_dependencies {
 }
 
 function run {
-    cp ./.env.example ./.env
     echo "Don't forget update the .env"
     cargo run
 }

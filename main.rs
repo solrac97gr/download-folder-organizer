@@ -1,10 +1,20 @@
 use std::fs;
 use std::path::Path;
 
+use std::env;
+extern crate dotenv;
+
+
 
 fn main() {
-        //TODO: Implement dotenv
-        for entry in fs::read_dir("/Users/carlos97gr/Downloads").unwrap() {
+    
+        dotenv::from_path("./.env").expect("error loading env");
+        
+        let path_to_images = env::var("PATH_IMAGES").expect("env error");
+        let path_to_installers = env::var("PATH_INSTALLERS").expect("env error");
+        let path_to_documents =env::var("PATH_DOCUMENTS").expect("env error");
+
+        for entry in fs::read_dir(env::var("FOLDER_TO_ORGANIZE").expect("env error")).unwrap() {
             let entry = entry.unwrap();
             let path = entry.path();
            
@@ -14,23 +24,22 @@ fn main() {
                     let path_string = Path::new(&path).to_str().unwrap();
                     let file_name = Path::new(&path).file_name().unwrap().to_str().unwrap();
                     let file_type= Path::new(&path).extension().unwrap();
-                  
+
+                    //IMAGES
                     if file_type == "jpeg" ||file_type == "png" || file_type == "jpg" {
-                        let path_to = "/Users/carlos97gr/Downloads/images/";
-                        let destination_file = format!("{}{}",path_to,file_name);
+                        
+                        let destination_file = format!("{}/{}",path_to_images,file_name);
                         fs::copy(path_string,destination_file).expect("copy error");
                         
                     }
-
+                    //INSTALLERS
                     if file_type == "dmg" || file_type == "app" {
-                        let path_to = "/Users/carlos97gr/Downloads/installers/";
-                        let destination_file = format!("{}{}",path_to,file_name);
+                        let destination_file = format!("{}/{}",path_to_installers,file_name);
                         fs::copy(path_string,destination_file).expect("copy error");
                     }
 
                     if file_type == "pdf" {
-                        let path_to = "/Users/carlos97gr/Downloads/documents/";
-                        let destination_file = format!("{}{}",path_to,file_name);
+                        let destination_file = format!("{}/{}",path_to_documents,file_name);
                         fs::copy(path_string,destination_file).expect("copy error");
                     }
 
