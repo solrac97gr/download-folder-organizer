@@ -1,6 +1,7 @@
 use std::fs;
 use std::path::Path;
 
+
 fn main() {
         //TODO: Implement dotenv
         for entry in fs::read_dir("/Users/carlos97gr/Downloads").unwrap() {
